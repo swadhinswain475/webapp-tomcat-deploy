@@ -1,36 +1,36 @@
 pipeline{
 	tools{
 		jdk 'JAVA_HOME'
-		mvn 'MAVEN_HOME'
+		maven 'M2_HOME'
 	}
-	
 	agent any
-	
 	stages{
-		stage{
-			step("git checkout")
-			 git 'https://github.com/swadhinswain475/webapp-tomcat-deploy.git'
+		stage("git checkout"){
+			steps{
+			git 'https://github.com/swadhinswain475/webapp-tomcat-deploy.git'
+			}
 		}
 		
-		stage{
-			step("maven package")
+		stage("maven package"){
+			steps{
 			 sh 'mvn clean package'
-			  sh 'mv target/*.war target/mywebapp.war'
+			 sh 'mv target/*.war target/mywebapp.war'
+			}
 		}
 		
-		stage{
-			step("tomcat deploy")
+		stage("tomcat deploy"){
+			steps{
 			 sshagent(['tomcat']) {
     // some block
 	
 	sh """
-		scp -o StrictHostKeyChecking=no target/mywebapp.war ubuntu@43.205.213.247:/home/ubuntu/tomcat/webapps
-		
-		ssh ubuntu@43.205.213.247 /home/ubuntu/tomcat/bin/shutdown.sh
-		ssh ubuntu@43.205.213.247 /home/ubuntu/tomcat/bin/startup.sh
-	
+	  scp -o StrictHostKeyChecking=no target/mywebapp.war ubuntu@43.205.213.247:/home/ubuntu/tomcat/webapps
+	  
+	  ssh ubuntu@43.205.213.247 /home/ubuntu/tomcat/bin/shutdown.sh
+	  ssh ubuntu@43.205.213.247 /home/ubuntu/tomcat/bin/startup.sh
 	"""
 }
+			}
 		}
 	}
 }

@@ -10,7 +10,7 @@ pipeline{
 		stage{
 			step("git checkout")
 			 git branch: 'master',
-			  url: https://github.com/swadhinswain475/webapp-tomcat-deploy.git
+			     url: https://github.com/swadhinswain475/webapp-tomcat-deploy.git
 		}
 		
 		stage{
